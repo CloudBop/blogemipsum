@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { PostDetail } from "./PostDetail";
+import { useQuery } from "react-query";
 const maxPostPage = 10;
 
 async function fetchPosts() {
@@ -15,10 +16,16 @@ export function Posts() {
   const [selectedPost, setSelectedPost] = useState(null);
 
   // replace with useQuery
-  const data = [];
-
+  const { data, isError, error, isLoading } = useQuery("getSomePosts", fetchPosts, { staleTime: 5000 });
+  if (isLoading) return <h2>Loading....</h2>
+  if (isError) return (
+    <div>
+      <h3>Ooops, something went wrong.</h3>
+      <p>{error.toString()}</p>
+    </div>)
+  //
   return (
-    <>
+    (<>
       <ul>
         {data.map((post) => (
           <li
@@ -31,16 +38,16 @@ export function Posts() {
         ))}
       </ul>
       <div className="pages">
-        <button disabled onClick={() => {}}>
+        <button disabled onClick={() => { }}>
           Previous page
         </button>
         <span>Page {currentPage + 1}</span>
-        <button disabled onClick={() => {}}>
+        <button disabled onClick={() => { }}>
           Next page
         </button>
       </div>
       <hr />
       {selectedPost && <PostDetail post={selectedPost} />}
-    </>
+    </>)
   );
 }
