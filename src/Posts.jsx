@@ -25,9 +25,10 @@ export function Posts() {
       // increment
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(
-        // prefecth this query
-        ["getPosts", nextPage], () => fetchPosts(nextPage), {
-        // 
+        // react-query cached key+[dep]
+        ["getPosts", nextPage],
+        // if (stale) 
+        () => fetchPosts(nextPage), {
         staleTime: 2000,
         keepPreviousData: true
       })
